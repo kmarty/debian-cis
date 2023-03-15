@@ -303,7 +303,7 @@ does_group_exist() {
 
 is_service_enabled() {
     local SERVICE=$1
-    if [ "$($SUDO_CMD find /etc/rc?.d/ -name "S*$SERVICE" -print | wc -l)" -gt 0 ]; then
+    if ( $SUDO_CMD systemctl is-enabled "$SERVICE" > /dev/null 2>&1 ); then
         debug "Service $SERVICE is enabled"
         FNRET=0
     else
