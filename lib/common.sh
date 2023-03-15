@@ -66,7 +66,10 @@ becho() {
 cecho() {
     COLOR=$1
     shift
-    builtin echo -e "${COLOR}$*${NC}"
+    builtin echo -ne "${COLOR}"
+    printf "%s" "$*"
+    builtin echo -e "${NC}"
+
 }
 
 crit() {
