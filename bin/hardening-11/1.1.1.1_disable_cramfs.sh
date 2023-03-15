@@ -6,7 +6,7 @@
 #
 
 #
-# 1.1.1.1 Ensure Mounting of cramfs filesystems is disabled (Scored)
+# 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Automated)
 #
 
 set -e # One error, it's over
@@ -14,8 +14,9 @@ set -u # One variable unset, it's over
 
 # shellcheck disable=2034
 HARDENING_LEVEL=2
+CIS_LEVEL=1
 # shellcheck disable=2034
-DESCRIPTION="Disable mounting of cramfs filesystems."
+DESCRIPTION="Ensure mounting of cramfs filesystems is disabled (Automated)"
 
 KERNEL_OPTION="CONFIG_CRAMFS"
 MODULE_NAME="cramfs"
