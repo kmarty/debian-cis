@@ -47,3 +47,7 @@ has_mount_option() {
     fi
 }
 
+does_perl_pattern_exist_in_file() {
+    _does_pattern_exist_in_file "-P" "$@"
+}
+
