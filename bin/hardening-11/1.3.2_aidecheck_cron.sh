@@ -33,11 +33,11 @@ audit() {
 	does_perl_pattern_exist_in_file "$FILE" "$PATTERN"
         if [ "$FNRET" = 0 ]; then
             FOUND=1
+	    ok "$PATTERN is present in $FILE"
+	    break
         fi
     done
-    if [ $FOUND = 1 ]; then
-        ok "$PATTERN is present in $FILES"
-    else
+    if [ $FOUND != 1 ]; then
         crit "$PATTERN is not present in $FILES"
     fi
 }
