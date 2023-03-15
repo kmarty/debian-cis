@@ -13,7 +13,7 @@ set -e # One error, it's over
 set -u # One variable unset, it's over
 
 # shellcheck disable=2034
-HARDENING_LEVEL=2
+HARDENING_LEVEL=1
 # shellcheck disable=2034
 DESCRIPTION="Disable mounting of cramfs filesystems."
 
