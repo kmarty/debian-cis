@@ -411,24 +411,15 @@ is_kernel_option_enabled() {
 # Mounting point
 #
 
-# Verify $1 is a partition declared in fstab
+# Verify $1 is a partition
 is_a_partition() {
     local PARTITION=$1
     FNRET=128
-    if [ ! -f /etc/fstab ] || [ -z "$(sed '/^#/d' /etc/fstab)" ]; then
-        debug "/etc/fstab not found or empty, searching mountpoint"
-        if mountpoint -q "$PARTITION"; then
-            FNRET=0
-        fi
+    if findmnt --noheadings --kernel "$PARTITION" >/dev/null; then 
+	FNRET=0
     else
-        if grep "[[:space:]]$1[[:space:]]" /etc/fstab | grep -vqE "^#"; then
-            debug "$PARTITION found in fstab"
-            FNRET=0
-        else
-            debug "Unable to find $PARTITION in fstab"
-            FNRET=1
-        fi
-
+	debug "Unable to find $PARTITION"
+	FNRET=1
     fi
 }
 
@@ -448,23 +439,11 @@ is_mounted() {
 has_mount_option() {
     local PARTITION=$1
     local OPTION=$2
-    if [ ! -f /etc/fstab ] || [ -z "$(sed '/^#/d' /etc/fstab)" ]; then
-        debug "/etc/fstab not found or empty, reading current mount options"
-        has_mounted_option "$PARTITION" "$OPTION"
+    if [ "$(findmnt --noheadings --kernel "$PARTITION" | grep "$OPTION")" ]; then
+        FNRET=0
     else
-        if grep "[[:space:]]${PARTITION}[[:space:]]" /etc/fstab | grep -vE "^#" | awk '{print $4}' | grep -q "bind"; then
-            local actual_partition
-            actual_partition="$(grep "[[:space:]]${PARTITION}[[:space:]]" /etc/fstab | grep -vE "^#" | awk '{print $1}')"
-            debug "$PARTITION is a bind mount of $actual_partition"
-            PARTITION="$actual_partition"
-        fi
-        if grep "[[:space:]]${PARTITION}[[:space:]]" /etc/fstab | grep -vE "^#" | awk '{print $4}' | grep -q "$OPTION"; then
-            debug "$OPTION has been detected in fstab for partition $PARTITION"
-            FNRET=0
-        else
-            debug "Unable to find $OPTION in fstab for partition $PARTITION"
-            FNRET=1
-        fi
+        debug "Unable to find $OPTION for partition $PARTITION"
+        FNRET=1
     fi
 }
 
