@@ -14,7 +14,8 @@ set -u # One variable unset, it's over
 
 # shellcheck disable=2034
 HARDENING_LEVEL=3
-CIS_LEVEL=1
+CIS_S_LEVEL=1
+CIS_W_LEVEL=1
 # shellcheck disable=2034
 DESCRIPTION="Ensure noexec option set on /var/log/audit partition (Automated)"
 

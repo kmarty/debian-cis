@@ -14,7 +14,8 @@ set -u # One variable unset, it's over
 
 # shellcheck disable=2034
 HARDENING_LEVEL=3
-CIS_LEVEL=2
+CIS_S_LEVEL=2
+CIS_W_LEVEL=2
 # shellcheck disable=2034
 DESCRIPTION="Ensure separate partition exists for /var/tmp (Automated)"
 

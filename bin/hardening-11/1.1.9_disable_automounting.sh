@@ -14,7 +14,8 @@ set -u # One variable unset, it's over
 
 # shellcheck disable=2034
 HARDENING_LEVEL=2
-CIS_LEVEL=2
+CIS_S_LEVEL=1
+CIS_W_LEVEL=2
 # shellcheck disable=2034
 DESCRIPTION="Disable Automounting (Automated)"
 
