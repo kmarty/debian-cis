@@ -1,4 +1,4 @@
-# :lock: CIS Debian 9/10 Hardening
+# :lock: CIS Debian 11 Hardening  !!! Work In Progress !!! Do not use, yet!
 
 :tada: **News**: this project is back in the game and is from now on maintained. Be free to use and to
 report issues if you find any!
@@ -16,7 +16,7 @@ report issues if you find any!
 ![License](https://img.shields.io/github/license/ovh/debian-cis)
 ---
 
-Modular Debian 9/10 security hardening scripts based on [cisecurity.org](https://www.cisecurity.org)
+Modular Debian 11 security hardening scripts based on [cisecurity.org](https://www.cisecurity.org)
 recommendations. We use it at [OVHcloud](https://www.ovhcloud.com) to harden our PCI-DSS infrastructure.
 
 ```console
