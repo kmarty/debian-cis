@@ -6,52 +6,55 @@
 #
 
 #
-# 1.1.1.1 Ensure Mounting of cramfs filesystems is disabled (Scored)
+# 1.1.2 Ensure /tmp is configured (Scored)
 #
 
 set -e # One error, it's over
 set -u # One variable unset, it's over
 
 # shellcheck disable=2034
-HARDENING_LEVEL=2
+HARDENING_LEVEL=3
 # shellcheck disable=2034
-DESCRIPTION="Disable mounting of cramfs filesystems."
+DESCRIPTION="Ensure /tmp is configured (Scored)"
 
-KERNEL_OPTION="CONFIG_CRAMFS"
-MODULE_NAME="cramfs"
+# Quick factoring as many script use the same logic
+PARTITION="/tmp"
 
 # This function will be called if the script status is on enabled / audit mode
 audit() {
-    if [ "$IS_CONTAINER" -eq 1 ]; then
-        # In an unprivileged container, the kernel modules are host dependent, so you should consider enforcing it
-        ok "Container detected, consider host enforcing or disable this check!"
+    info "Verifying that $PARTITION is a partition"
+    FNRET=0
+    is_a_partition "$PARTITION"
+    if [ "$FNRET" -gt 0 ]; then
+        crit "$PARTITION is not a partition"
+        FNRET=2
     else
-        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME"
-        if [ "$FNRET" = 0 ]; then # 0 means true in bash, so it IS activated
-            crit "$MODULE_NAME is enabled!"
+        ok "$PARTITION is a partition"
+        is_mounted "$PARTITION"
+        if [ "$FNRET" -gt 0 ]; then
+            warn "$PARTITION is not mounted"
+            FNRET=1
         else
-            ok "$MODULE_NAME is disabled"
+            ok "$PARTITION is mounted"
         fi
     fi
 }
 
 # This function will be called if the script status is on enabled mode
 apply() {
-    if [ "$IS_CONTAINER" -eq 1 ]; then
-        # In an unprivileged container, the kernel modules are host dependent, so you should consider enforcing it
-        ok "Container detected, consider host enforcing!"
+    if [ "$FNRET" = 0 ]; then
+        ok "$PARTITION is correctly set"
+    elif [ "$FNRET" = 2 ]; then
+        crit "$PARTITION is not a partition, correct this by yourself, I cannot help you here"
     else
-        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME"
-        if [ "$FNRET" = 0 ]; then # 0 means true in bash, so it IS activated
-            warn "I cannot fix $MODULE_NAME, recompile your kernel or blacklist module $MODULE_NAME (/etc/modprobe.d/blacklist.conf : +install $MODULE_NAME /bin/true)"
-        else
-            ok "$MODULE_NAME is disabled"
-        fi
+        info "mounting $PARTITION"
+        mount "$PARTITION"
     fi
 }
 
 # This function will check config parameters required
 check_config() {
+    # No parameter for this script
     :
 }
 

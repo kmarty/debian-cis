@@ -6,7 +6,7 @@
 #
 
 #
-# 1.1.1.1 Ensure Mounting of cramfs filesystems is disabled (Scored)
+# 1.1.1.5 Ensure mounting of squashfs filesystems is disabled (Scored)
 #
 
 set -e # One error, it's over
@@ -15,10 +15,10 @@ set -u # One variable unset, it's over
 # shellcheck disable=2034
 HARDENING_LEVEL=2
 # shellcheck disable=2034
-DESCRIPTION="Disable mounting of cramfs filesystems."
+DESCRIPTION="Disable mounting of squashfs filesytems."
 
-KERNEL_OPTION="CONFIG_CRAMFS"
-MODULE_NAME="cramfs"
+KERNEL_OPTION="CONFIG_SQUASHFS"
+MODULE_NAME="squashfs"
 
 # This function will be called if the script status is on enabled / audit mode
 audit() {
@@ -26,7 +26,7 @@ audit() {
         # In an unprivileged container, the kernel modules are host dependent, so you should consider enforcing it
         ok "Container detected, consider host enforcing or disable this check!"
     else
-        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME"
+        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME" "($MODULE_NAME|install)"
         if [ "$FNRET" = 0 ]; then # 0 means true in bash, so it IS activated
             crit "$MODULE_NAME is enabled!"
         else
@@ -41,7 +41,7 @@ apply() {
         # In an unprivileged container, the kernel modules are host dependent, so you should consider enforcing it
         ok "Container detected, consider host enforcing!"
     else
-        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME"
+        is_kernel_option_enabled "$KERNEL_OPTION" "$MODULE_NAME" "($MODULE_NAME|install)"
         if [ "$FNRET" = 0 ]; then # 0 means true in bash, so it IS activated
             warn "I cannot fix $MODULE_NAME, recompile your kernel or blacklist module $MODULE_NAME (/etc/modprobe.d/blacklist.conf : +install $MODULE_NAME /bin/true)"
         else
