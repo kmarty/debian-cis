@@ -212,8 +212,10 @@ fi
 if [ "$ASK_LOGLEVEL" ]; then LOGLEVEL=$ASK_LOGLEVEL; fi
 # shellcheck source=../lib/common.sh
 [ -r "$CIS_ROOT_DIR"/lib/common.sh ] && . "$CIS_ROOT_DIR"/lib/common.sh
-# shellcheck source=../lib/utils.sh
-[ -r "$CIS_ROOT_DIR"/lib/utils.sh ] && . "$CIS_ROOT_DIR"/lib/utils.sh
+# shellcheck source=../lib/utils-common.sh
+[ -r "$CIS_ROOT_DIR"/lib/utils-common.sh ] && . "$CIS_ROOT_DIR"/lib/utils-common.sh
+# Version specific utils-*.sh
+[ -r "$CIS_ROOT_DIR"/lib/utils-"$DEB_MAJ_VER".sh ] && . "$CIS_ROOT_DIR"/lib/utils-"$DEB_MAJ_VER".sh
 # shellcheck source=../lib/constants.sh
 [ -r "$CIS_ROOT_DIR"/lib/constants.sh ] && . "$CIS_ROOT_DIR"/lib/constants.sh
 

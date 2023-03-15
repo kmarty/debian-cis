@@ -23,10 +23,12 @@ if [ -n "$SAVED_LOGLEVEL" ]; then
 fi
 # shellcheck source=../lib/common.sh
 [ -r "$CIS_ROOT_DIR"/lib/common.sh ] && . "$CIS_ROOT_DIR"/lib/common.sh
-# shellcheck source=../lib/utils.sh
-[ -r "$CIS_ROOT_DIR"/lib/utils.sh ] && . "$CIS_ROOT_DIR"/lib/utils.sh
+# shellcheck source=../lib/utils-common.sh
+[ -r "$CIS_ROOT_DIR"/lib/utils-common.sh ] && . "$CIS_ROOT_DIR"/lib/utils-common.sh
 # shellcheck source=constants.sh
 [ -r "$CIS_ROOT_DIR"/lib/constants.sh ] && . "$CIS_ROOT_DIR"/lib/constants.sh
+# Debian version specific utils-*.sh
+[ -r "$CIS_ROOT_DIR"/lib/utils-"$DEB_MAJ_VER".sh ] && . "$CIS_ROOT_DIR"/lib/utils-"$DEB_MAJ_VER".sh
 
 # Environment Sanitizing
 export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
